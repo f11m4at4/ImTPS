@@ -6,6 +6,7 @@
 #include <GameFramework/SpringArmComponent.h>
 #include <Camera/CameraComponent.h>
 #include <Blueprint/UserWidget.h>
+#include <Kismet/GameplayStatics.h>
 
 // Sets default values
 ATPSPlayer::ATPSPlayer()
@@ -36,6 +37,12 @@ ATPSPlayer::ATPSPlayer()
 	bUseControllerRotationYaw = true;
 
 	JumpMaxCount = 2;
+	// Crosshair 를 불러와서 할당
+	ConstructorHelpers::FClassFinder<UUserWidget> TempClass(TEXT("WidgetBlueprint'/Game/Blueprints/WBP_Crosshair.WBP_Crosshair_C'"));
+	if (TempClass.Succeeded())
+	{
+		CrosshairFactory = TempClass.Class;
+	}
 }
 
 // Called when the game starts or when spawned
@@ -102,6 +109,11 @@ void ATPSPlayer::FireInput()
 	bool bHit = GetWorld()->LineTraceSingleByChannel(HitInfo, StartPos, EndPos, ECC_Visibility, Params);
 	if (bHit)
 	{
+		// 부딪힌 지점에 효과 발생시키기
+		FTransform BulletTrans;
+		BulletTrans.SetLocation(HitInfo.ImpactPoint);
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), BulletEffectFactory, BulletTrans);
+
 		// 부딪힌 녀석을 날려보내고 싶다.
 		// 1. 만약 부딪힌 녀석의 컴포넌트가 물리가 켜져있다면
 		auto Comp = HitInfo.GetComponent();

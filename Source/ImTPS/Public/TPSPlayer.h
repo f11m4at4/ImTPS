@@ -44,4 +44,7 @@ public:
 	TSubclassOf<class UUserWidget> CrosshairFactory;
 	UPROPERTY()
 	class UUserWidget* _CrosshairUI;
+	
+	UPROPERTY(EditDefaultsOnly, Category="BulletEffect")
+	class UParticleSystem* BulletEffectFactory;
 };
