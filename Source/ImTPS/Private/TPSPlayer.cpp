@@ -7,6 +7,7 @@
 #include <Camera/CameraComponent.h>
 #include <Blueprint/UserWidget.h>
 #include <Kismet/GameplayStatics.h>
+#include "EnemyFSM.h"
 
 // Sets default values
 ATPSPlayer::ATPSPlayer()
@@ -127,6 +128,16 @@ void ATPSPlayer::FireInput()
 			FVector Force = TPSCamComp->GetForwardVector() * Comp->GetMass() * 5000;
 
 			Comp->AddImpulseAtLocation(Force, HitInfo.ImpactPoint);
+		}
+
+		// ∏∏æ‡ ∫Œµ˙»˘ ≥‡ºÆ¿Ã Enemy ¿Ã∏È
+		//HitInfo.GetActor()->GetName().Contains("Enemy")
+		auto Enemy = HitInfo.GetActor()->GetDefaultSubobjectByName(TEXT("FSM"));
+		if (Enemy)
+		{
+			// -> OnDamageProcess »£√‚«ÿ¡÷±‚
+			auto FSM = Cast<UEnemyFSM>(Enemy);
+			FSM->OnDamageProcess();
 		}
 	}
 }
