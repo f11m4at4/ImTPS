@@ -47,4 +47,6 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly, Category="BulletEffect")
 	class UParticleSystem* BulletEffectFactory;
+
+	FVector Direction;
 };

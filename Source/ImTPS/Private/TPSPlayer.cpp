@@ -58,7 +58,10 @@ void ATPSPlayer::BeginPlay()
 void ATPSPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
+	Direction = FTransform(GetControlRotation()).TransformVector(Direction);
+	AddMovementInput(Direction);
+	Direction = FVector::ZeroVector;
 }
 
 // Called to bind functionality to input
@@ -77,14 +80,16 @@ void ATPSPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 void ATPSPlayer::MoveRight(float Value)
 {
-	FVector Direction = GetActorRightVector();
-	AddMovementInput(Direction, Value);
+	Direction.Y = Value;
+	/*FVector Direction = GetActorRightVector();
+	AddMovementInput(Direction, Value);*/
 }
 
 void ATPSPlayer::MoveForward(float Value)
 {
-	FVector Direction = GetActorForwardVector();
-	AddMovementInput(Direction, Value);
+	Direction.X = Value;
+	/*FVector Direction = GetActorForwardVector();
+	AddMovementInput(Direction, Value);*/
 }
 
 void ATPSPlayer::Turn(float Value)
